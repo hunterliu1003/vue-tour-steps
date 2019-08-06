@@ -103,6 +103,7 @@ export default {
       val ? this.handleShow() : this.handleHide()
     },
     step: 'handleStep',
+    'tour.target': 'handleStep',
     'tour.lockScroll': {
       handler(val) {
         val ? disableBodyScroll(this.$targetElement) : clearAllBodyScrollLocks()
@@ -142,7 +143,10 @@ export default {
     },
     setTour() {
       this.$targetElement = document.querySelector(this.tour.target)
-      if (!this.$targetElement) return
+      if (!this.$targetElement) {
+        this.close()
+        return
+      }
       const rect = this.$targetElement.getBoundingClientRect()
       this.x = rect.left
       this.y = rect.top
@@ -151,7 +155,7 @@ export default {
     },
     scrollIntoView($targetElement) {
       this.$nextTick(() => {
-        this.isActive &&
+        this.isActive && // when closing tour should not scroll into first step
           $targetElement &&
           $targetElement.scrollIntoView({
             block: 'end',
