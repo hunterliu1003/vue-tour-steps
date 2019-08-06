@@ -1,12 +1,22 @@
-<template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view />
-  </div>
+<template lang="pug">
+  #app
+    #nav
+      router-link(to='/') Home
+      span  |
+      router-link(to='/about') About
+    router-view
+    TourGroup
 </template>
+
+<script>
+import TourGroup from '@/components/TourGroup'
+
+export default {
+  components: {
+    TourGroup
+  }
+}
+</script>
 
 <style lang="scss">
 #app {

@@ -1,5 +1,5 @@
 <template lang="pug">
-  div
+  div(v-if="isActive")
     TourMask(
       v-bind='bindTour' 
       :hideOverlay='tour.hideOverlay' 
@@ -24,10 +24,13 @@ import TourPopper from './TourPopper.vue'
 export default {
   components: { TourMask, TourWrapper, TourPopper },
   props: {
+    value: {
+      required: false
+    },
     steps: {
       /**
         [{
-          target          String  default ''
+          target          String  default null
           strokeWidth     Number  default 0
           radius          Number  default 0
           hideOverlay     Boolean default false
@@ -45,6 +48,7 @@ export default {
     wrapperClass: { type: String, default: '' }
   },
   data: () => ({
+    isActive: false,
     x: 0,
     y: 0,
     maskWidth: 0,
@@ -54,7 +58,7 @@ export default {
   computed: {
     tour() {
       return {
-        target: '',
+        target: null,
         strokeWidth: 0,
         radius: 0,
         hideOverlay: false,
@@ -63,7 +67,6 @@ export default {
         placement: 'top',
         offsetX: 0,
         offsetY: 0,
-
         ...this.steps[this.step]
       }
     },
@@ -88,43 +91,34 @@ export default {
     }
   },
   watch: {
+    value: {
+      handler(val) {
+        this.$nextTick(() => {
+          this.isActive = !!val
+        })
+      },
+      immediate: true
+    },
+    isActive(val) {
+      val ? this.handleShow() : this.handleHide()
+    },
     step: 'setTour',
     'tour.lockScroll'(val) {
       val ? disableBodyScroll(this.$targetElement) : clearAllBodyScrollLocks()
     }
   },
-  mounted() {
-    this.setTour()
-    this.$nextTick(() => {
-      this.scrollIntoView(this.$targetElement)
-      disableBodyScroll(this.$targetElement)
-    })
-    window.addEventListener('resize', this.setTour, false)
-    window.addEventListener('scroll', this.setTour, true)
-  },
   beforeDestroy() {
-    clearAllBodyScrollLocks()
-    window.removeEventListener('resize', this.setTour, false)
-    window.removeEventListener('scroll', this.setTour, true)
+    this.handleHide()
   },
   methods: {
     setTour() {
       this.$targetElement = document.querySelector(this.tour.target)
-      if (!this.$targetElement) {
-        this.resetTour()
-        return
-      }
+      if (!this.$targetElement) return
       const rect = this.$targetElement.getBoundingClientRect()
       this.x = rect.left
       this.y = rect.top
       this.maskWidth = this.$targetElement.offsetWidth
       this.maskHeight = this.$targetElement.offsetHeight
-    },
-    resetTour() {
-      this.x = 0
-      this.y = 0
-      this.maskWidth = 0
-      this.maskHeight = 0
     },
     setStep(step) {
       this.steps[step] ? this.$emit('setStep', step) : this.close()
@@ -133,7 +127,7 @@ export default {
       })
     },
     close() {
-      this.$emit('close')
+      this.$emit('input', false)
       this.$emit('setStep', 0)
     },
     scrollIntoView($targetElement) {
@@ -143,6 +137,20 @@ export default {
           inline: 'nearest',
           behavior: 'smooth'
         })
+    },
+    handleShow() {
+      this.setTour()
+      this.$nextTick(() => {
+        this.scrollIntoView(this.$targetElement)
+        disableBodyScroll(this.$targetElement)
+      })
+      window.addEventListener('resize', this.setTour, false)
+      window.addEventListener('scroll', this.setTour, true)
+    },
+    handleHide() {
+      clearAllBodyScrollLocks()
+      window.removeEventListener('resize', this.setTour, false)
+      window.removeEventListener('scroll', this.setTour, true)
     }
   }
 }
