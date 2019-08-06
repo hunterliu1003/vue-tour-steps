@@ -2,6 +2,7 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
   .BundleAnalyzerPlugin
 
 module.exports = {
+  publicPath: 'vue-tour-steps',
   outputDir: (() => {
     switch (process.env.VUE_APP_CONFIG) {
       case 'lib':
