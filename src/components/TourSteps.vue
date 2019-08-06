@@ -147,6 +147,7 @@ export default {
         this.close()
         return
       }
+      if (this.tour.lockScroll) disableBodyScroll(this.$targetElement)
       const rect = this.$targetElement.getBoundingClientRect()
       this.x = rect.left
       this.y = rect.top
