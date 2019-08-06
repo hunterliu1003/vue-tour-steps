@@ -2,6 +2,14 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
   .BundleAnalyzerPlugin
 
 module.exports = {
+  outputDir: (() => {
+    switch (process.env.VUE_APP_CONFIG) {
+      case 'lib':
+        return 'dist'
+      case 'docs':
+        return 'docs'
+    }
+  })(),
   configureWebpack: {
     optimization: {
       splitChunks: {
