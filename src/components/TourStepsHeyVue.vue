@@ -43,19 +43,37 @@ export default {
         persistent: true,
         placement: 'bottom',
         lockScroll: false,
-        offsetY: 10
+        offsetY: 10,
+        beforeStep() {
+          console.log('before: #tourStep1')
+        },
+        afterStep() {
+          console.log('after: #tourStep1')
+        }
       },
       {
         target: '#tourStep2',
         strokeWidth: 4,
         radius: 4,
         hideOverlay: true,
-        lockScroll: false
+        lockScroll: true,
+        beforeStep() {
+          console.log('before: #tourStep2')
+        },
+        afterStep() {
+          console.log('after: #tourStep2')
+        }
       },
       {
         target: '#tourStep3',
         strokeWidth: 4,
-        radius: 4
+        radius: 4,
+        beforeStep() {
+          console.log('before: #tourStep3')
+        },
+        afterStep() {
+          console.log('after: #tourStep3')
+        }
       }
     ]
   }),

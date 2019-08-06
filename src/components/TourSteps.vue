@@ -67,6 +67,8 @@ export default {
         placement: 'top',
         offsetX: 0,
         offsetY: 0,
+        beforeStep: () => {},
+        afterStep: () => {},
         ...this.steps[this.step]
       }
     },
@@ -103,12 +105,9 @@ export default {
       val ? this.handleShow() : this.handleHide()
     },
     step: 'handleStep',
-    'tour.target': 'handleStep',
-    'tour.lockScroll': {
-      handler(val) {
-        val ? disableBodyScroll(this.$targetElement) : clearAllBodyScrollLocks()
-      },
-      immediate: true
+    'tour.target': 'handleTarget',
+    'tour.lockScroll'(val) {
+      val ? disableBodyScroll(this.$targetElement) : clearAllBodyScrollLocks()
     }
   },
   beforeDestroy() {
@@ -116,6 +115,7 @@ export default {
   },
   methods: {
     handleShow() {
+      this.tour.beforeStep()
       this.setTour()
       this.scrollIntoView(this.$targetElement)
       window.addEventListener('resize', this.setTour, false)
@@ -126,20 +126,35 @@ export default {
       window.removeEventListener('resize', this.setTour, false)
       window.removeEventListener('scroll', this.setTour, true)
     },
-    handleStep() {
-      if (!this.steps[this.step]) {
-        this.close()
-        return
-      }
+    handleStep(newVal, oldVal) {
+      this.isActive &&
+        newVal > oldVal &&
+        this.steps[oldVal].afterStep &&
+        this.steps[oldVal].afterStep()
+      if (this.handleClose()) return
+      this.isActive && newVal > oldVal && this.tour.beforeStep(newVal)
+      this.setTour()
+      this.scrollIntoView(this.$targetElement)
+    },
+    handleTarget() {
+      if (this.handleClose()) return
       this.setTour()
       this.scrollIntoView(this.$targetElement)
     },
     setStep(step) {
       this.$emit('setStep', step)
     },
+    handleClose() {
+      if (!this.steps[this.step]) {
+        this.close()
+        return true
+      }
+    },
     close() {
       this.$emit('input', false)
-      this.$emit('setStep', 0)
+      this.$nextTick(() => {
+        this.setStep(0)
+      })
     },
     setTour() {
       this.$targetElement = document.querySelector(this.tour.target)
