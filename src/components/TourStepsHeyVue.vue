@@ -21,7 +21,6 @@
 					button(@click='slotProps.setStep(step - 1)') prev
 					button(@click='slotProps.setStep(step + 1)') next
 					button(@click='slotProps.close()') skip
-
 </template>
 
 <script>
@@ -43,6 +42,7 @@ export default {
         radius: 4,
         persistent: true,
         placement: 'bottom',
+        lockScroll: false,
         offsetY: 10
       },
       {

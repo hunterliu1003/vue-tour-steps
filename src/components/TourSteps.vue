@@ -102,15 +102,44 @@ export default {
     isActive(val) {
       val ? this.handleShow() : this.handleHide()
     },
-    step: 'setTour',
-    'tour.lockScroll'(val) {
-      val ? disableBodyScroll(this.$targetElement) : clearAllBodyScrollLocks()
+    step: 'handleStep',
+    'tour.lockScroll': {
+      handler(val) {
+        val ? disableBodyScroll(this.$targetElement) : clearAllBodyScrollLocks()
+      },
+      immediate: true
     }
   },
   beforeDestroy() {
     this.handleHide()
   },
   methods: {
+    handleShow() {
+      this.setTour()
+      this.scrollIntoView(this.$targetElement)
+      window.addEventListener('resize', this.setTour, false)
+      window.addEventListener('scroll', this.setTour, true)
+    },
+    handleHide() {
+      clearAllBodyScrollLocks()
+      window.removeEventListener('resize', this.setTour, false)
+      window.removeEventListener('scroll', this.setTour, true)
+    },
+    handleStep() {
+      if (!this.steps[this.step]) {
+        this.close()
+        return
+      }
+      this.setTour()
+      this.scrollIntoView(this.$targetElement)
+    },
+    setStep(step) {
+      this.$emit('setStep', step)
+    },
+    close() {
+      this.$emit('input', false)
+      this.$emit('setStep', 0)
+    },
     setTour() {
       this.$targetElement = document.querySelector(this.tour.target)
       if (!this.$targetElement) return
@@ -120,37 +149,16 @@ export default {
       this.maskWidth = this.$targetElement.offsetWidth
       this.maskHeight = this.$targetElement.offsetHeight
     },
-    setStep(step) {
-      this.steps[step] ? this.$emit('setStep', step) : this.close()
-      this.$nextTick(() => {
-        this.scrollIntoView(this.$targetElement)
-      })
-    },
-    close() {
-      this.$emit('input', false)
-      this.$emit('setStep', 0)
-    },
     scrollIntoView($targetElement) {
-      $targetElement &&
-        $targetElement.scrollIntoView({
-          block: 'end',
-          inline: 'nearest',
-          behavior: 'smooth'
-        })
-    },
-    handleShow() {
-      this.setTour()
       this.$nextTick(() => {
-        this.scrollIntoView(this.$targetElement)
-        disableBodyScroll(this.$targetElement)
+        this.isActive &&
+          $targetElement &&
+          $targetElement.scrollIntoView({
+            block: 'end',
+            inline: 'nearest',
+            behavior: 'smooth'
+          })
       })
-      window.addEventListener('resize', this.setTour, false)
-      window.addEventListener('scroll', this.setTour, true)
-    },
-    handleHide() {
-      clearAllBodyScrollLocks()
-      window.removeEventListener('resize', this.setTour, false)
-      window.removeEventListener('scroll', this.setTour, true)
     }
   }
 }
