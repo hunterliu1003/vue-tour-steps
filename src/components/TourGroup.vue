@@ -1,6 +1,6 @@
 <template lang="pug">
 	#tourGroup
-		p(@click="showTourStepsHeyVue = true") open tour-steps
+		button(@click="showTourStepsHeyVue = true") open tour-steps
 		TourStepsHeyVue(v-if="showTourStepsHeyVue")
 </template>
 

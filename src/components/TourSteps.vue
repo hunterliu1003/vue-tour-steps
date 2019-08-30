@@ -25,7 +25,9 @@ export default {
   components: { TourMask, TourWrapper, TourPopper },
   props: {
     value: {
-      required: false
+      // required: false
+      type: Boolean,
+      default: false
     },
     steps: {
       /**
@@ -132,7 +134,7 @@ export default {
         this.steps[oldVal].afterStep &&
         this.steps[oldVal].afterStep()
       if (this.handleClose()) return
-      this.isActive && newVal > oldVal && this.tour.beforeStep(newVal)
+      this.isActive && newVal > oldVal && this.tour.beforeStep()
       this.setTour()
       this.scrollIntoView(this.$targetElement)
     },
