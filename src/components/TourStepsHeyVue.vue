@@ -38,12 +38,16 @@ export default {
     steps: [
       {
         target: '#tourStep1',
-        strokeWidth: 10,
+        paddingTop: 10,
+        paddingRight: 20,
+        paddingBottom: 30,
+        paddingLeft: 40,
         radius: 4,
         persistent: true,
         placement: 'bottom',
         lockScroll: false,
-        offsetY: 10,
+        offsetY: -10,
+        popperOffsetY: 10,
         beforeStep() {
           console.log('before: #tourStep1')
         },
@@ -53,7 +57,6 @@ export default {
       },
       {
         target: '#tourStep2',
-        strokeWidth: 4,
         radius: 4,
         hideOverlay: true,
         lockScroll: true,
@@ -66,7 +69,6 @@ export default {
       },
       {
         target: '#tourStep3',
-        strokeWidth: 4,
         radius: 4,
         beforeStep() {
           console.log('before: #tourStep3')

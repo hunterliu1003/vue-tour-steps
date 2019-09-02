@@ -6,8 +6,9 @@
       button open tour-steps
       p(style='width: 200px;' v-for='i in 2' :key='i')
         | Duo amet elitr elitr.
-      p#tourStep1(style='width: 200px; height: 100px; background: gray; display: flex; justify-content: center; align-items: center;')
-        | Duo amet elitr elitr.
+      div(style='width: 300px; height: 200px; background: pink; display: flex; justify-content: center; align-items: center;')
+        p#tourStep1(style='width: 200px; height: 100px; background: gray; display: flex; justify-content: center; align-items: center;')
+          | Duo amet elitr elitr.
       p#tourStep2(style='width: 200px;') Duo amet elitr elitr.
       p(style='width: 400px;')
         | Sed ut gubergren gubergren rebum tempor sed. Dolor stet justo dolore

@@ -9,8 +9,8 @@
       slot(name='wrapper' v-bind='bindScopedSlots')
       TourPopper(
         :placement='tour.placement' 
-        :offsetX='tour.offsetX' 
-        :offsetY='tour.offsetY'
+        :offsetX='tour.popperOffsetX' 
+        :offsetY='tour.popperOffsetY'
       )
         slot(name='popper' v-bind='bindScopedSlots')
 </template>
@@ -25,7 +25,6 @@ export default {
   components: { TourMask, TourWrapper, TourPopper },
   props: {
     value: {
-      // required: false
       type: Boolean,
       default: false
     },
@@ -33,7 +32,6 @@ export default {
       /**
         [{
           target          String  default null
-          strokeWidth     Number  default 0
           radius          Number  default 0
           hideOverlay     Boolean default false
           persistent      Boolean default false
@@ -41,6 +39,8 @@ export default {
           placement String  default 'top'
           offsetX   Number  default 0
           offsetY   Number  default 0
+          popperOffsetX   Number  default 0
+          popperOffsetY   Number  default 0
         }, ...]
       */
       type: Array,
@@ -61,7 +61,10 @@ export default {
     tour() {
       return {
         target: null,
-        strokeWidth: 0,
+        paddingLeft: 0,
+        paddingRight: 0,
+        paddingTop: 0,
+        paddingBottom: 0,
         radius: 0,
         hideOverlay: false,
         persistent: false,
@@ -69,6 +72,8 @@ export default {
         placement: 'top',
         offsetX: 0,
         offsetY: 0,
+        popperOffsetX: 0,
+        popperOffsetY: 0,
         beforeStep: () => {},
         afterStep: () => {},
         ...this.steps[this.step]
@@ -79,9 +84,14 @@ export default {
       return {
         x,
         y,
+        offsetX: tour.offsetX,
+        offsetY: tour.offsetY,
         maskWidth,
         maskHeight,
-        strokeWidth: tour.strokeWidth,
+        paddingLeft: tour.paddingLeft,
+        paddingRight: tour.paddingRight,
+        paddingTop: tour.paddingTop,
+        paddingBottom: tour.paddingBottom,
         radius: tour.radius
       }
     },

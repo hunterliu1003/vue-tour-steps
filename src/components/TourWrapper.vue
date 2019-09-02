@@ -1,11 +1,11 @@
 <template lang="pug" functional>
-  div.tour-wrapper(
+  .tour-wrapper(
     :class="[data.class, data.staticClass]"
     :style="{\
-      top: `${props.y - props.strokeWidth / 2}px`,\
-      left: `${props.x - props.strokeWidth / 2}px`,\
-      width: `${props.maskWidth + props.strokeWidth}px`,\
-      height: `${props.maskHeight + props.strokeWidth}px`\
+      top: `${props.y + props.offsetY - props.paddingTop}px`,\
+      left: `${props.x + props.offsetX - props.paddingLeft}px`,\
+      width: `${props.maskWidth + props.paddingLeft + props.paddingRight}px`,\
+      height: `${props.maskHeight + props.paddingTop + props.paddingBottom}px`\
     }"
   )
     slot

@@ -5,10 +5,10 @@
         rect(fill='#fff' height='100%' width='100%')
         path(:d='\
           rightRoundedRect(\
-            x + radius - strokeWidth / 2,\
-            y - strokeWidth / 2,\
-            maskWidth + strokeWidth,\
-            maskHeight + strokeWidth,\
+            x + offsetX + radius - paddingLeft,\
+            y + offsetY - paddingTop,\
+            maskWidth + paddingLeft + paddingRight,\
+            maskHeight + paddingTop + paddingBottom,\
             radius\
           )\
           ' stroke='#000' :stroke-width='0'
