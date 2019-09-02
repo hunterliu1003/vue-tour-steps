@@ -161,7 +161,7 @@ export default {
     setTour() {
       this.$targetElement = document.querySelector(this.tour.target)
       if (!this.$targetElement) {
-        this.close()
+        this.setStep(this.step + 1)
         return
       }
       if (this.tour.lockScroll) disableBodyScroll(this.$targetElement)
